@@ -1212,7 +1212,11 @@ def get_nvgpu_memory_capacity():
         ]
 
         if not memory_values:
-            raise ValueError("No GPU memory values found.")
+            fallback_value = os.environ.get("SGLANG_GPU_MEMORY_TOTAL_FALLBACK", None)
+            if fallback_value:
+                return float(fallback_value)
+            else:
+                raise ValueError("No GPU memory values found.")
 
         # Return the minimum memory value
         return min(memory_values)
